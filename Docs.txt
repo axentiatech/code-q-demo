@@ -1,0 +1,57 @@
+Fonctionnalité de l’application VIGOR
+
+
+Authentification
+	Disponible :
+Authentification avec login et password.
+
+	A discuter :
+Mot de passe oublié + se souvenir de moi.
+
+Dashboard	Disponible :
+Recherche + recherche multi critère des candidats et contact.
+
+
+Gestion de Candidats et des clients 	Disponible :
+-Gestion des clients et des candidats (Ajout, modification, suppression, lister).
+-Envoyer un mail.
+-Enregistrer la sélection actuelle.
+
+Fiche Candidat	A discuter : 
+Afficher les informations du candidat et affecter les tâches + d’autres informations si nécessaire.
+
+
+
+
+Liste des tâches	Disponible (si admin) :
+Affichage des tâches disponible aux autres utilisateurs, on peut ainsi modifier ou supprimer une tâche.
+Disponible (Si utilisateur) :
+Afficher les tâches disponibles.
+
+	Filtres disponibles :
+Par date, aujourd’hui & passé, aujourd’hui & avenir et passé
+
+
+Liste des missions	Disponible :
+Liste de la globalité des missions
+	Recherche :
+Par numéro de mission ou par mot-clé
+	Filtrer par : Missions spécifiques, missions en cours, missions terminées
+
+Liste des séléctions enregistrées	Disponible :
+Lister les séléctions des consultants ainsi que les modifier, les supprimer ou les afficher.
+Envoyer un email à la sélection.
+	Filtrer par : Pôle Assurance,Pôle IT,Pôle ERP/BI, Pôle Banque/Finance
+Fiche Conseil	A discuter.
+Admin	Disponible : 
+-Gestion des emails types + Filtrer par : Pôle Assurance,Pôle IT,Pôle ERP/BI, Pôle Banque/Finance.
+-Tableau de transfert des candidats (Mass) : transférer les candidats (multi sélection) vers un administrateur de l’application.
+-Reporting client : Liste des candidats selon le filtre de sociétés et affichage des candidats associés.
+Filtres : Société et mission + dossiers envoyés depuis (ex :1 semaine,1mois...) + Afficher (ex : candidat embauché, Rattaché mais pas envoyé) 
+-Stats clients : ?
+-Liste des candidats révélés non convoqués : Filtre de révélations depuis (ex : 10 jours,20 jours...)
+Liste des candidats non convoqués par les clients.
+	A discuter : 
+Gestion des utilisateurs de VIGOR (droit d'accès, permissions...).
+Gestion du compte actuelle : modification du mot de passe, email, nom de l’utilisateur... 
+
