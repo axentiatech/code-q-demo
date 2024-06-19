@@ -1,0 +1,63 @@
+<?php
+namespace App\Tests\Unit\BoundedContexts\UserManager\Integration\UserRole;
+use App\BoundedContexts\UserManager\Domain\Exception\UserRoleException;
+use App\Infrastructure\Entity\UserRole;
+use 
+App\Tests\Unit\BoundedContexts\UserManager\Integration\UserManagerTestCase
+;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Webmozart\Assert\InvalidArgumentException;
+class DeleteUserRoleTest extends UserManagerTestCase
+{
+    public static function setDefaultFixtures(): void
+    {
+        static::userRolesFixtures()->insertFixtures();
+    }
+    public function testDeleteUserRoleWithInvalidUuid()
+    {
+        try {
+            $this->deleteUserRole(123);
+        } catch (\InvalidArgumentException $exception) {
+            self::assertStringContainsString('is not a valid format for 
+Uuid.', $exception->getMessage());
+        }
+    }
+    public function testDeleteUserRoleWithNullUuid()
+    {
+        try {
+            $this->deleteUserRole(null);
+        } catch (InvalidArgumentException $exception) {
+            self::assertEquals("Uuid should not be empty.", 
+$exception->getMessage());
+        }
+    }
+    public function testDeleteUserRoleWithNonexistentUuid()
+    {
+        try {
+            $this->deleteUserRole('83ae2048-e81b-4507-8902-3c489b40b453');
+        } catch (ResourceNotFoundException $exception) {
+            self::assertStringContainsString('User role with Uuid : 
+"83ae2048-e81b-4507-8902-3c489b40b453" not found.', 
+$exception->getMessage());
+        }
+    }
+    public function testIfUserRoleWasDeletedSuccessfully()
+    {
+        /** @var UserRole $userRole */
+        $userRole = 
+$this->getUserRoleUuid('d2ce1b4a-5164-4f9d-a101-eecaabee3b42');
+        self::assertEquals('d2ce1b4a-5164-4f9d-a101-eecaabee3b42', 
+$userRole->getUuid()->value());
+        $response = 
+$this->deleteUserRole('d2ce1b4a-5164-4f9d-a101-eecaabee3b42');
+        self::assertStringContainsString('role with 
+"d2ce1b4a-5164-4f9d-a101-eecaabee3b42" is deleted!', $response);
+        try {
+            
+$this->getUserRoleUuid('d2ce1b4a-5164-4f9d-a101-eecaabee3b42');
+        } catch (UserRoleException $exception) {
+            self::assertEquals("User not found.", 
+$exception->getMessage());
+        }
+    }
+}

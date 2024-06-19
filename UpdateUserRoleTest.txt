@@ -1,0 +1,90 @@
+<?php
+namespace App\Tests\Unit\BoundedContexts\UserManager\Integration\UserRole;
+use App\BoundedContexts\UserManager\Domain\Exception\UserRoleException;
+use 
+App\Tests\Unit\BoundedContexts\UserManager\Integration\UserManagerTestCase
+;
+use Webmozart\Assert\InvalidArgumentException;
+class UpdateUserRoleTest extends UserManagerTestCase
+{
+    public static function setDefaultFixtures(): void
+    {
+        static::userRolesFixtures()->insertFixtures();
+    }
+    public function testUpdatingUserRoleWithEmptyTitle(): void
+    {
+        try {
+            $this->updateUserRole(
+                'd2ce1b4a-5164-4f9d-a101-eecaabee3b42',
+                null
+            );
+        } catch (InvalidArgumentException $exception) {
+            self::assertStringContainsString('User role name must not be 
+empty!', $exception->getMessage());
+        }
+    }
+    public function testUpdatingUserRoleWithInvalidUuidArgument(): void
+    {
+        try {
+            $this->updateUserRole(
+                123,
+                'Admin'
+            );
+        } catch (\InvalidArgumentException $exception) {
+            self::assertStringContainsString('is not a valid format for 
+Uuid.', $exception->getMessage());
+        }
+    }
+    public function testUpdatingUserRoleWithDuplicatedTitleArgument(): 
+void
+    {
+        try {
+            $this->updateUserRole(
+                'd2ce1b4a-5164-4f9d-a101-eecaabee3b42',
+                'Consultant'
+            );
+        } catch (UserRoleException $exception) {
+            self::assertStringContainsString("Can't update the role 
+because the role 'Consultant' already exist.", $exception->getMessage());
+        }
+    }
+    public function testUpdatingUserRoleWithInvalidTitleArgument(): void
+    {
+        try {
+            $this->updateUserRole(
+                "d2ce1b4a-5164-4f9d-a101-eecaabee3b42",
+                123
+            );
+        } catch (\InvalidArgumentException $exception) {
+            self::assertStringContainsString('Title: invalid argument.', 
+$exception->getMessage());
+        }
+    }
+    public function testUpdatingUserRoleWithNonExistentUuidArgument(): 
+void
+    {
+        try {
+            $this->updateUserRole(
+                "1c0fc262-7a38-4f74-b689-e5d45761ff25",
+                'Manager'
+            );
+        } catch (UserRoleException $exception) {
+            self::assertStringContainsString('User role 
+"1c0fc262-7a38-4f74-b689-e5d45761ff25" does not exist.', 
+$exception->getMessage());
+        }
+    }
+    public function testUserRoleTitleIfItsUpdated(): void
+    {
+        $response = $this->updateUserRole(
+            'd2ce1b4a-5164-4f9d-a101-eecaabee3b42',
+            'Manager'
+        );
+        $userRole = $this->getUserRole('Manager');
+        self::assertEquals('Role with title "Manager" has been updated !', 
+$response);
+        self::assertEquals('Manager', $userRole->getTitle());
+        self::assertEquals('d2ce1b4a-5164-4f9d-a101-eecaabee3b42', 
+$userRole->getUuid());
+    }
+}

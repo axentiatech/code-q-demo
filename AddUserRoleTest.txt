@@ -1,0 +1,68 @@
+<?php
+namespace App\Tests\Unit\BoundedContexts\UserManager\Integration\UserRole;
+use App\BoundedContexts\UserManager\Domain\Exception\UserRoleException;
+use 
+App\Tests\Unit\BoundedContexts\UserManager\Integration\UserManagerTestCase
+;
+use Webmozart\Assert\InvalidArgumentException;
+class AddUserRoleTest extends UserManagerTestCase
+{
+    public static function setDefaultFixtures(): void
+    {
+        static::userRolesFixtures()->insertFixtures();
+    }
+    public function testAddUserRoleWithInvalidArguments(): void
+    {
+        try {
+            $this->addUserRole(
+                123
+            );
+        } catch (InvalidArgumentException $exception) {
+            self::assertStringContainsString('Title: invalid argument.', 
+$exception->getMessage());
+        }
+    }
+    public function testAddEmptyUserRole(): void
+    {
+        try {
+            $this->addUserRole(
+                ""
+            );
+        } catch (InvalidArgumentException $exception) {
+            self::assertStringContainsString('User role name must not be 
+empty!', $exception->getMessage());
+        }
+    }
+    public function testAddingUserRoleWithNoParameter(): void
+    {
+        try {
+            $this->addUserRole(
+                null
+            );
+        } catch (InvalidArgumentException $exception) {
+            self::assertStringContainsString('User role name must not be 
+empty!', $exception->getMessage());
+        }
+    }
+    public function testAddAlreadyExistsUserRole(): void
+    {
+        try {
+            $this->addUserRole(
+                'Admin'
+            );
+        } catch (UserRoleException $exception) {
+            self::assertStringContainsString('User role "Admin" already 
+exist.', $exception->getMessage());
+        }
+    }
+    public function testAddUserRoleDoesNotExist(): void
+    {
+        $response = $this->addUserRole(
+            'Guest'
+        );
+        self::assertStringContainsString('Role with title "Guest" has been 
+added !', $response);
+        self::assertEquals('Guest', 
+$this->getUserRole('Guest')->getTitle());
+    }
+}
