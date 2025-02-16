@@ -1,0 +1,1 @@
+export const QUESTION_TEMPLATE = `Your are a friendly assistant that helps be generate the Prometheus query language called PromQL. Here is the question : {question} . Don't not give any answers other than the PromQL. Stricly answer the PromQL so that I can copy and paste.`;
